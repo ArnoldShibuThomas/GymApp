@@ -1,0 +1,10 @@
+.gradle
+*.number
+*.properties
+*.json
+*.txt
+**/.DS_Store
+/build/
+*.log
+*/.idea
+*.classpath

@@ -1,0 +1,41 @@
+<project name="GYM" default="dist" basedir=".">
+    <description>
+        GYM build file
+    </description>
+    <!-- set global properties for this build -->
+    <property name="src" location="src"/>
+    <property name="build" location="build"/>
+    <property name="dist" location="dist"/>
+
+    <propertyfile file="build.properties">
+        <entry key="buildNumber" type="int" default="0" operation="+" pattern="00" />
+    </propertyfile>
+
+
+    <target name="compile">
+        <echo message="Build ${buildNumber}" />
+
+        <echo message="Copying files to build folder..." />
+        <mkdir dir="${buildDir}" />
+        <copy todir="${buildDir}">
+            <fileset dir="${sourceDir}">
+                <include name="**/displayObjects/*" />
+                <include name="**/plugin/*" />
+                <include name="index.cfm" />
+            </fileset>
+        </copy>
+
+        <echo message="Updating build number in /plugin/config.xml" />
+        <replace file="${buildDir}\plugin\config.xml" propertyFile="build.properties">
+            <replacefilter token="@buildNumber@" property="buildNumber" />
+        </replace>
+
+        <echo message="Zipping contents..." />
+        <zip destfile="${sourceDir}\HelloPlugin.zip" basedir="${buildDir}" />
+
+        <echo message="Cleaning up..." />
+        <delete includeEmptyDirs="true">
+            <fileset dir="${buildDir}" includes="**" />
+        </delete>
+    </target>
+</project>
